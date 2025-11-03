@@ -10,4 +10,5 @@ export interface IAdvRepository {
     id: string,
     data: { title?: string; description?: string; image?: string }
   ): Promise<Adv>;
+  getAllAdvKey(): Promise<string[] | []>;
 }

@@ -6,10 +6,10 @@ import {
 } from "./infrastructure/database/mongodb/connection";
 import loggerMiddleware from "./presentation/middlewares/loggerMiddleware";
 import { AdminRouter } from "./presentation/routes/admin.routes";
+import { CommonRouter } from "./presentation/routes/common.routes";
 
 export class App {
-  constructor(private _server: IServer) {
-  }
+  constructor(private _server: IServer) {}
 
   async initialize(): Promise<void> {
     await this._connectDB();
@@ -23,8 +23,10 @@ export class App {
   }
   private _registerRoutes(): void {
     const adminRoutes = new AdminRouter().getRouter();
+    const commonRoutes = new CommonRouter().getRouter();
 
-    this._server.registerRoutes("/api/user/admin", adminRoutes);
+    this._server.registerRoutes("/api/adv/admin", adminRoutes);
+    this._server.registerRoutes("/api/adv/common", commonRoutes);
   }
 
   private _registerErrorHandler(): void {
@@ -47,5 +49,4 @@ export class App {
       process.exit(1);
     }
   }
-
 }

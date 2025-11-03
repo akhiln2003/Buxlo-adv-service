@@ -72,4 +72,23 @@ export class AdvRepository implements IAdvRepository {
       throw new Error(`db error to edit user: ${error.message}`);
     }
   }
+  async getAllAdvKey(): Promise<string[]> {
+    try {
+      // Fetch only the image field for all documents
+      const allDocs = await AdvSchema.find({}, { image: 1, _id: 0 }).lean();
+
+      // Extract and validate string values
+      const imageKeys = allDocs
+        .map((doc) => doc.image)
+        .filter(
+          (key): key is string => typeof key === "string" && key.trim() !== ""
+        );
+
+      return imageKeys;
+    } catch (error: unknown) {
+      if (error instanceof Error)
+        throw new Error(`DB error fetching adv keys: ${error.message}`);
+      throw new Error("Unknown error while fetching adv keys");
+    }
+  }
 }

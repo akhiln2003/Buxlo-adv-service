@@ -56,4 +56,32 @@ export class TrustedUsRepository implements ITrustedUsRepository {
       throw new Error(`db error to fetch user: ${error.message}`);
     }
   }
+
+  async getAllAdvKey(): Promise<string[]> {
+    try {
+      const allDocs = await TrustedUsSchema.find(
+        {},
+        { image: 1, _id: 0 }
+      ).lean();
+
+      // Extract and validate the image keys (ensure they're strings)
+      const imageKeys = allDocs
+        .map((doc) => doc.image)
+        .filter(
+          (key): key is string => typeof key === "string" && key.trim() !== ""
+        );
+
+      return imageKeys;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Database error:", error.message);
+        throw new Error(
+          `DB error fetching advertisement keys: ${error.message}`
+        );
+      } else {
+        console.error("Unknown error:", error);
+        throw new Error("Unknown error while fetching advertisement keys");
+      }
+    }
+  }
 }

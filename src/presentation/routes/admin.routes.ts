@@ -23,7 +23,6 @@ export class AdminRouter {
   private _router: Router;
   private _diContainer: DIContainer;
   private _upload = multer({ storage: multer.memoryStorage() });
-
   private _createAdvController!: CreateAdvController;
   private _fetchAdvController!: FetchAdvController;
   private _fetchAdvImageController!: FetchAdvImageController;
@@ -48,6 +47,7 @@ export class AdminRouter {
     this._fetchAdvController = new FetchAdvController(
       this._diContainer.fetchAdvUseCase()
     );
+    
     this._fetchAdvImageController = new FetchAdvImageController(
       this._diContainer.fetchS3ImageUseCase()
     );
@@ -55,7 +55,7 @@ export class AdminRouter {
       this._diContainer.createTurstedUsUsecase()
     );
     this._fetchtrustedusController = new FetchtrustedusController(
-      this._diContainer.fetchtrustedUsUseCase()
+      this._diContainer.fetchTrustedUsUseCase()
     );
     this._fetchtrustedusImageController = new FetchtrustedusImageController(
       this._diContainer.fetchS3ImageUseCase()
