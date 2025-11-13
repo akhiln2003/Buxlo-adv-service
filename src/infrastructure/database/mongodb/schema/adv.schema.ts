@@ -5,6 +5,7 @@ interface AdvAttr {
   image: string;
   title: string;
   description: string;
+  link: string;
 }
 
 interface AdvDoc extends mongoose.Document {
@@ -12,6 +13,7 @@ interface AdvDoc extends mongoose.Document {
   image: string;
   title: string;
   description: string;
+  link: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -32,6 +34,10 @@ const advSchema = new mongoose.Schema(
       required: true,
     },
     description: {
+      type: String,
+      required: true,
+    },
+    link: {
       type: String,
       required: true,
     },

@@ -1,13 +1,13 @@
 import { Router } from "express";
 import { DIContainer } from "../../infrastructure/di/DIContainer";
-import { FetchAllAdvController } from "../controllers/common/fetchAllAdvs.controller";
 import { FetchAlltrustedusController } from "../controllers/common/fetchAlltrustedus.controller";
+import { FetchRandomAdvController } from "../controllers/common/fetchRandomAdvs.controller";
 
 export class CommonRouter {
   private _router: Router;
   private _diContainer: DIContainer;
 
-  private _fetchAllAdvController!: FetchAllAdvController;
+  private _fetchRandomAdvController!: FetchRandomAdvController;
   private _fetchAlltrustedusController!: FetchAlltrustedusController;
 
   constructor() {
@@ -18,8 +18,8 @@ export class CommonRouter {
   }
 
   private _initializeControllers(): void {
-    this._fetchAllAdvController = new FetchAllAdvController(
-      this._diContainer.fetchAllAdvUseCase()
+    this._fetchRandomAdvController = new FetchRandomAdvController(
+      this._diContainer.fetchRandomAdvUseCase()
     );
     this._fetchAlltrustedusController = new FetchAlltrustedusController(
       this._diContainer.fetchAllTrustedUsUseCase()
@@ -27,7 +27,10 @@ export class CommonRouter {
   }
 
   private _initializeRoutes(): void {
-    this._router.get("/fetchalladvs", this._fetchAllAdvController.fetchData);
+    this._router.get(
+      "/fetchrandomadvs",
+      this._fetchRandomAdvController.fetchData
+    );
     this._router.get(
       "/fetchalltrustedus",
       this._fetchAlltrustedusController.fetchData

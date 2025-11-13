@@ -4,6 +4,7 @@ export interface ICreateAdvData {
    image: string,
    title: string,
    description: string,
+   link:string,
    id?: string,
 }
 

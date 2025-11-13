@@ -11,6 +11,7 @@ export class AdvRepository implements IAdvRepository {
         image: adv.image,
         title: adv.title,
         description: adv.description,
+        link: adv.link,
       });
       return await newAdv.save();
     } catch (error: any) {
@@ -72,23 +73,39 @@ export class AdvRepository implements IAdvRepository {
       throw new Error(`db error to edit user: ${error.message}`);
     }
   }
-  async getAllAdvKey(): Promise<string[]> {
+
+  async getRandomAdv(excludeId?: string): Promise<Adv> {
     try {
-      // Fetch only the image field for all documents
-      const allDocs = await AdvSchema.find({}, { image: 1, _id: 0 }).lean();
+      const matchStage: Record<string, unknown> = {
+        image: { $exists: true, $ne: "" },
+      };
 
-      // Extract and validate string values
-      const imageKeys = allDocs
-        .map((doc) => doc.image)
-        .filter(
-          (key): key is string => typeof key === "string" && key.trim() !== ""
-        );
+      // Exclude specific _id if provided
+      if (excludeId) {
+        matchStage["_id"] = { $ne: excludeId };
+      }
 
-      return imageKeys;
-    } catch (error: unknown) {
-      if (error instanceof Error)
-        throw new Error(`DB error fetching adv keys: ${error.message}`);
-      throw new Error("Unknown error while fetching adv keys");
+      // Randomly pick one document
+      const pipeline = [{ $match: matchStage }, { $sample: { size: 1 } }];
+      const docs = await AdvSchema.aggregate<Adv>(pipeline).exec();
+
+      if (docs.length === 0) {
+        return {
+          id: "",
+          title: "",
+          description: "",
+          image: "",
+        } as Adv;
+      }
+
+      return docs[0];
+    } catch (error) {
+      console.error("Error in getRandomAdv:", error);
+
+      if (error instanceof Error) {
+        throw new BadRequest(`DB error fetching random adv: ${error.message}`);
+      }
+      throw new BadRequest("Unknown error while fetching random adv");
     }
   }
 }

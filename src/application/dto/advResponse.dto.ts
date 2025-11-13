@@ -7,6 +7,7 @@ export const AdvResponseDto = z.object({
   image: z.string(),
   title: z.string(),
   description: z.string(),
+  link: z.string(),
 });
 
 export type AdvResponseDto = z.infer<typeof AdvResponseDto>;
@@ -23,6 +24,7 @@ export class AdvMapper {
       image: adv.image,
       title: adv.title,
       description: adv.description,
+      link: adv.link,
     });
   }
 }

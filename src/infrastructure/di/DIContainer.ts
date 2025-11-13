@@ -10,8 +10,8 @@ import { DeleteTrustedUsUseCase } from "../../application/usecase/admin/DeleteTr
 import { FetchAdvUseCase } from "../../application/usecase/admin/fetchAdv.useCase";
 import { DeleteAdvUseCase } from "../../application/usecase/admin/DeleteAdv.useCase";
 import { EditAdvUseCase } from "../../application/usecase/admin/EditAdv.useCase";
-import { FetchAllAdvUseCase } from "../../application/usecase/common/fetchAllAdbs.useCase";
 import { FetchAllTrustedUsUseCase } from "../../application/usecase/common/fetchAllTrustedUs.useCase";
+import { FetchRandomAdvUseCase } from "../../application/usecase/common/fetchRandomAdbs.useCase";
 
 export class DIContainer {
   private _s3Service: IS3Service;
@@ -28,14 +28,17 @@ export class DIContainer {
     return new FetchtrustedUsUseCase(this._trustedUsRepository);
   }
   fetchAllTrustedUsUseCase() {
-    return new FetchAllTrustedUsUseCase(this._trustedUsRepository , this._s3Service);
+    return new FetchAllTrustedUsUseCase(
+      this._trustedUsRepository,
+      this._s3Service
+    );
   }
   fetchAdvUseCase() {
     return new FetchAdvUseCase(this._advRepository);
   }
 
-  fetchAllAdvUseCase() {
-    return new FetchAllAdvUseCase(this._advRepository, this._s3Service);
+  fetchRandomAdvUseCase() {
+    return new FetchRandomAdvUseCase(this._advRepository, this._s3Service);
   }
 
   fetchS3ImageUseCase() {
